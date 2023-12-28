@@ -2,7 +2,6 @@ package kr.co.chunjae.repository;
 
 import kr.co.chunjae.dto.BoardDTO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -43,5 +42,9 @@ public class BoardRepository {
 
     public List<BoardDTO> pagingList(Map<String, Integer> pagingParams) {
         return template.selectList("Board.pagingList", pagingParams);
+    }
+
+    public int boardCount() {
+        return template.selectOne("Board.boardCount");
     }
 }

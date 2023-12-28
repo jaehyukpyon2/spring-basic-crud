@@ -1,9 +1,11 @@
 package kr.co.chunjae.controller;
 
 import kr.co.chunjae.dto.BoardDTO;
+import kr.co.chunjae.dto.CommentDTO;
+import kr.co.chunjae.dto.PageDTO;
 import kr.co.chunjae.service.BoardService;
+import kr.co.chunjae.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @GetMapping(value = "/save")
     public String saveForm() {
@@ -29,7 +32,7 @@ public class BoardController {
     public String save(@ModelAttribute BoardDTO boardDTO) {
         int saveResult = boardService.save(boardDTO);
         if (saveResult > 0) {
-            return "redirect:/board/";
+            return "redirect:/board/paging";
         } else {
             return "save";
         }
@@ -43,10 +46,15 @@ public class BoardController {
     }
 
     @GetMapping
-    public String findById(@RequestParam("id") Long id, Model model) {
+    public String findById(@RequestParam("id") Long id,
+                           @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                           Model model) {
         boardService.updateHits(id);
         BoardDTO boardDTO = boardService.findById(id);
         model.addAttribute("board", boardDTO);
+        model.addAttribute("page", page);
+        List<CommentDTO> commentDTOList = commentService.findAll(id);
+        model.addAttribute("commentList", commentDTOList);
         return "detail";
     }
 
@@ -77,7 +85,10 @@ public class BoardController {
                          Model model) {
         log.info("page = " + page);
         List<BoardDTO> pagingList = boardService.pageList(page);
+        log.info("pagingList={}", pagingList);
+        PageDTO pageDTO = boardService.pagingParam(page);
         model.addAttribute("boardList", pagingList);
-        return "list";
+        model.addAttribute("paging", pageDTO);
+        return "paging";
     }
 }

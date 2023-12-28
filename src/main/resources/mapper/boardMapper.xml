@@ -4,39 +4,39 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Board">
     <insert id="save" parameterType="board">
-        insert
-        into board_table(boardWriter, boardPass, boardTitle, boardContents)
-        values(#{boardWriter}, #{boardPass}, #{boardTitle}, #{boardContents})
+        INSERT
+        INTO board_table(boardWriter, boardPass, boardTitle, boardContents)
+        VALUES(#{boardWriter}, #{boardPass}, #{boardTitle}, #{boardContents})
     </insert>
 
     <select id="findAll" resultType="board">
-        select *
-        from board_table
-        order by id desc
+        SELECT *
+        FROM board_table
+        ORDER BY id DESC
     </select>
 
     <select id="findById" parameterType="Long" resultType="board">
-        select *
-        from board_table
-        where id = #{id}
+        SELECT *
+        FROM board_table
+        WHERE id = #{id}
     </select>
 
     <update id="updateHits" parameterType="Long">
-        update board_table
-        set boardHits = boardHits + 1
-        where id = #{id}
+        UPDATE board_table
+        SET boardHits = boardHits + 1
+        WHERE id = #{id}
     </update>
 
     <delete id="delete" parameterType="Long">
-        delete
-        from board_table
-        where id = #{id}
+        DELETE
+        FROM board_table
+        WHERE id = #{id}
     </delete>
 
     <update id="update" parameterType="board">
-        update board_table
-        set boardTitle = #{boardTitle}, boardContents = #{boardContents}
-        where id = #{id}
+        UPDATE board_table
+        SET boardTitle = #{boardTitle}, boardContents = #{boardContents}
+        WHERE id = #{id}
     </update>
 
     <select id="pagingList" parameterType="hashmap" resultType="board">
@@ -44,5 +44,10 @@
         FROM board_table
         ORDER BY id DESC
         LIMIT ${start}, #{limit}
+    </select>
+
+    <select id="boardCount" resultType="Integer">
+        SELECT count(id)
+        FROM board_table
     </select>
 </mapper>

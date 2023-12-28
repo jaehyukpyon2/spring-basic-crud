@@ -8,5 +8,6 @@
     </settings>
     <typeAliases>
         <typeAlias type="kr.co.chunjae.dto.BoardDTO" alias="board"></typeAlias>
+        <typeAlias type="kr.co.chunjae.dto.CommentDTO" alias="comment"></typeAlias>
     </typeAliases>
 </configuration>
