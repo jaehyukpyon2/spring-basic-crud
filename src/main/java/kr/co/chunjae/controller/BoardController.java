@@ -4,6 +4,7 @@ import kr.co.chunjae.dto.BoardDTO;
 import kr.co.chunjae.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/board")
 @RequiredArgsConstructor
-@Log4j
+@Log4j2
 public class BoardController {
 
     private final BoardService boardService;
@@ -69,5 +70,14 @@ public class BoardController {
         model.addAttribute("board", dto);
         return "detail";
 //        return "redirect:/board?id="+boardDTO.getId(); - 조회수 증가
+    }
+
+    @GetMapping(value = "/paging")
+    public String paging(@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+                         Model model) {
+        log.info("page = " + page);
+        List<BoardDTO> pagingList = boardService.pageList(page);
+        model.addAttribute("boardList", pagingList);
+        return "list";
     }
 }

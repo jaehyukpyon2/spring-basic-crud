@@ -38,4 +38,11 @@
         set boardTitle = #{boardTitle}, boardContents = #{boardContents}
         where id = #{id}
     </update>
+
+    <select id="pagingList" parameterType="hashmap" resultType="board">
+        SELECT *
+        FROM board_table
+        ORDER BY id DESC
+        LIMIT ${start}, #{limit}
+    </select>
 </mapper>
